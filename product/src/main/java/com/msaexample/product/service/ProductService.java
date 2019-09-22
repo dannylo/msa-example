@@ -33,5 +33,22 @@ public class ProductService {
 		
 		return opt.get();
 	}
+	
+	public Product updated(Product updatedProduct) throws ProductException {
+		//avoiding bad requests.
+		Product verify = this.getById(updatedProduct.getId());
+		return this.repository.save(updatedProduct);
+		
+	}
+	
+	public void remove(Product product) throws ProductException {
+		//avoiding bad requests.
+		product = this.getById(product.getId());
+		if(product.getId() != 0) {
+			this.repository.delete(product);
+		} else {
+			throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
+		}
+	}
 
 }
