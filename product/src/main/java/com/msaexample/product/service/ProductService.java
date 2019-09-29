@@ -3,6 +3,8 @@ package com.msaexample.product.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,10 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 	
+	@Transactional
 	public Product save(Product newProduct) {
 		return this.repository.save(newProduct);
+		//TODO: Criar requisição ao serviço de estoque para registro do mesmo na API Inventory.
 	}
 	
 	public List<Product> getAll() {

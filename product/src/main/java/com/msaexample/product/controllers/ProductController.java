@@ -46,7 +46,6 @@ public class ProductController {
 	
 	@PutMapping
 	public ResponseEntity<?> update(@RequestBody Product product){
-		System.out.println(product.getName());
 		try {
 			return new ResponseEntity<Product> (this.service.updated(product), HttpStatus.OK);
 		} catch (ProductException e) {
