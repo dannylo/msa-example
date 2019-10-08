@@ -1,5 +1,7 @@
 package com.msaexample.inventory.service;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ public class InventoryService {
 	private InventoryRepository repository;
 
 	public Inventory save(Inventory inventory) {
+		inventory.setLastUpdated(LocalDate.now());
 		return repository.save(inventory);
 	}
 
