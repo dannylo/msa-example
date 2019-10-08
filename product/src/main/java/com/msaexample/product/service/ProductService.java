@@ -1,17 +1,24 @@
 package com.msaexample.product.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.msaexample.product.config.InventoryConfig;
 import com.msaexample.product.domain.Product;
+import com.msaexample.product.dto.InventoryDTO;
 import com.msaexample.product.enums.ExceptionMessages;
 import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.repository.ProductRepository;
+import com.msaexample.product.rest.handleexception.RestTemplateResponseErrorHandler;
 
 @Service
 public class ProductService {
@@ -19,10 +26,39 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 	
+	@Autowired
+	private InventoryConfig inventoryConfig;
+
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	@Autowired
+	private RestTemplateResponseErrorHandler errorHandler;
+	
 	@Transactional
 	public Product save(Product newProduct) {
-		return this.repository.save(newProduct);
-		//TODO: Criar requisição ao serviço de estoque para registro do mesmo na API Inventory.
+		StringBuilder inventoryPath = new StringBuilder();
+		this.restTemplate.setErrorHandler(errorHandler);
+		
+		inventoryPath.append(this.inventoryConfig.getUrl())
+		.append(":")
+		.append(this.inventoryConfig.getPort());
+		
+		newProduct = this.repository.save(newProduct);
+		HttpEntity<InventoryDTO> entity = new HttpEntity<InventoryDTO>(this.getDefaultInventory(newProduct));
+		restTemplate.exchange(inventoryPath.append("/").toString(), HttpMethod.POST, entity, InventoryDTO.class);
+		
+		return newProduct;
+	}
+	
+	private InventoryDTO getDefaultInventory(Product product) {
+
+		InventoryDTO inventory = new InventoryDTO();
+		inventory.setIdProduct(product.getId());
+		inventory.setAverageUnitPrice(BigDecimal.ZERO);
+		inventory.setQtdAvailable(0);
+		
+		return inventory;
 	}
 	
 	public List<Product> getAll() {
