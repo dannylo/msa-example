@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +30,20 @@ public class ProductService {
 	@Autowired
 	private InventoryConfig inventoryConfig;
 
-	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Autowired
 	private RestTemplateResponseErrorHandler errorHandler;
 	
+	@PostConstruct
+	public void init() {
+		this.restTemplate = new RestTemplate();
+		this.restTemplate.setErrorHandler(errorHandler);
+	}
+	
 	@Transactional
 	public Product save(Product newProduct) {
 		StringBuilder inventoryPath = new StringBuilder();
-		this.restTemplate.setErrorHandler(errorHandler);
 		
 		inventoryPath.append(this.inventoryConfig.getUrl())
 		.append(":")
@@ -46,13 +51,12 @@ public class ProductService {
 		
 		newProduct = this.repository.save(newProduct);
 		HttpEntity<InventoryDTO> entity = new HttpEntity<InventoryDTO>(this.getDefaultInventory(newProduct));
-		restTemplate.exchange(inventoryPath.append("/").toString(), HttpMethod.POST, entity, InventoryDTO.class);
+		restTemplate.exchange(inventoryPath.append("/inventory").toString(), HttpMethod.POST, entity, InventoryDTO.class);
 		
 		return newProduct;
 	}
 	
 	private InventoryDTO getDefaultInventory(Product product) {
-
 		InventoryDTO inventory = new InventoryDTO();
 		inventory.setIdProduct(product.getId());
 		inventory.setAverageUnitPrice(BigDecimal.ZERO);
