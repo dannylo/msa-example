@@ -59,7 +59,8 @@ public class ProductService {
 	private InventoryDTO getDefaultInventory(Product product) {
 		InventoryDTO inventory = new InventoryDTO();
 		inventory.setIdProduct(product.getId());
-		inventory.setAverageUnitPrice(BigDecimal.ZERO);
+		inventory.setAverageUnitPrice(product.getUnitPrice());
+		inventory.setTotal(BigDecimal.ZERO);
 		inventory.setQtdAvailable(0);
 		
 		return inventory;

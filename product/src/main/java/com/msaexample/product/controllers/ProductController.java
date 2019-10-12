@@ -19,7 +19,7 @@ import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.service.ProductService;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
 	
 	@Autowired
