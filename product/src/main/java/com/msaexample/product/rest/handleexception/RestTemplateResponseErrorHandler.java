@@ -1,10 +1,12 @@
 package com.msaexample.product.rest.handleexception;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.springframework.http.HttpStatus.Series;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.client.ResponseErrorHandler;
 
 import com.msaexample.product.enums.ExceptionMessages;
@@ -27,7 +29,7 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 		            throw new InventoryApiException(ExceptionMessages.INVENTORY_SERVER_ERROR);
 		        } else if (response.getStatusCode()
 		          .series() == Series.CLIENT_ERROR) {
-		            throw new InventoryApiException(response.getStatusText());
+		            throw new InventoryApiException(StreamUtils.copyToString(response.getBody(), Charset.defaultCharset()));
 		        }
 		
 	}

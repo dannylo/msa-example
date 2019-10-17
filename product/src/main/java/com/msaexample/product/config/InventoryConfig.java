@@ -9,6 +9,17 @@ public class InventoryConfig {
 
 	private String url;
 	private String port;
+	private String root;
+	
+	
+	public StringBuilder getURLPrefix() {
+		StringBuilder path = new StringBuilder(this.url);
+		path.append(":")
+			.append(this.port);
+		return path;
+	}
+	
+
 
 	public String getUrl() {
 		return url;
@@ -24,6 +35,14 @@ public class InventoryConfig {
 
 	public void setPort(String port) {
 		this.port = port;
+	}
+
+	public String getRoot() {
+		return root;
+	}
+
+	public void setRoot(String root) {
+		this.root = root;
 	}
 
 }
