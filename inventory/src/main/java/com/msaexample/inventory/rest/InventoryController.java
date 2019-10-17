@@ -18,7 +18,7 @@ import com.msaexample.inventory.exceptions.InventoryException;
 import com.msaexample.inventory.service.InventoryService;
 
 @RestController
-@RequestMapping("/inventory")
+@RequestMapping("/inventories")
 public class InventoryController {
 
 	@Autowired
@@ -39,27 +39,4 @@ public class InventoryController {
 		}
 	}
 	
-	@PutMapping("/{idProduct}/input")
-	public ResponseEntity<?> registerInput(@PathVariable("idProduct") int idProduct, @RequestParam("qtd") int qtd){
-		try {
-			Inventory inventory = this.service.getByProduct(idProduct);
-			inventory.increase(qtd);
-			inventory = this.service.save(inventory);
-			return new ResponseEntity<Inventory> (inventory, HttpStatus.OK);
-		} catch (InventoryException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
-	
-	@PutMapping("/{idProduct}/output")
-	public ResponseEntity<?> registerOutput(@PathVariable("idProduct") int idProduct, @RequestParam("qtd") int qtd){
-		try {
-			Inventory inventory = this.service.getByProduct(idProduct);
-			inventory.increase(qtd);
-			inventory = this.service.save(inventory);
-			return new ResponseEntity<Inventory> (inventory, HttpStatus.OK);
-		} catch (InventoryException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
 }

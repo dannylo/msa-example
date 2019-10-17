@@ -15,7 +15,7 @@ import com.msaexample.inventory.exceptions.InventoryException;
 import com.msaexample.inventory.service.InventoryService;
 
 @RestController
-@RequestMapping("/inventory")
+@RequestMapping("/inventories")
 public class TransactionController {
 
 	@Autowired
@@ -24,6 +24,7 @@ public class TransactionController {
 	@PostMapping("/{idProduct}/input")
 	public ResponseEntity<?> registerInput(@RequestBody Transaction transaction, @PathVariable("idProduct") int idProduct) {
 		try {
+			transaction.setInventory(this.inventoryService.getByProduct(idProduct));
 			return new ResponseEntity<Inventory>(this.inventoryService.increaseInventory(transaction, idProduct), HttpStatus.OK) ;
 		} catch (InventoryException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
