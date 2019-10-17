@@ -43,20 +43,19 @@ public class InventoryService {
 
 	@Transactional
 	public Inventory increaseInventory(Transaction transaction, int idProduct) throws InventoryException {
-		Inventory inventory = transaction.getInventory();
+		transaction.setInventory(this.getByProduct(idProduct));
 
 		transaction.setType(TypeTransaction.BUY);
 		transaction.setDate(LocalDate.now());
 
-		if (inventory == null) {
+		if (transaction.getInventory() == null) {
 			throw new InventoryException(ExceptionMessage.INVENTORY_NOT_FOUND);
 		}
 
-		transaction.setInventory(inventory);
-		inventory.increase(transaction.getQtd());
+		transaction.getInventory().increase(transaction.getQtd());
 		transactionRepository.save(transaction);
 
-		return this.save(inventory);
+		return this.save(transaction.getInventory());
 	}
 
 	@Transactional
