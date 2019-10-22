@@ -33,11 +33,11 @@ public class TransactionController {
 		}
 	}
 	
-	@PostMapping("/buy")
+	@PostMapping("/purchase")
 	public ResponseEntity<?> createBuyTransaction(@RequestBody List<TransactionDTO> transactions) {
 		try {
-			this.service.createBuy(transactions);
-			return ResponseEntity.ok().body("Buy succeffuly created.");
+			this.service.createPurchase(transactions);
+			return ResponseEntity.ok().body("Purchase succeffuly created.");
 		} catch (ProductException e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(e.getMessage());

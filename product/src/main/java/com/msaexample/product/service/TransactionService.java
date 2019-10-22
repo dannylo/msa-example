@@ -59,7 +59,6 @@ public class TransactionService {
 	
 
 	public void createSale(List<TransactionDTO> transactions) throws ProductException {
-		//Nao deve usar o prefixo... e sim /transactions
 		StringBuilder path = this.inventoryConfig.getURLPrefix().append(this.inventoryConfig.getRoot());
 		if (!validate(transactions)) {
 			throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
@@ -75,7 +74,7 @@ public class TransactionService {
 		});
 	}
 	
-	public void createBuy(List<TransactionDTO> transactions) throws ProductException {
+	public void createPurchase(List<TransactionDTO> transactions) throws ProductException {
 		StringBuilder path = this.inventoryConfig.getURLPrefix().append(this.inventoryConfig.getRoot());
 		
 		if (!validate(transactions)) {
