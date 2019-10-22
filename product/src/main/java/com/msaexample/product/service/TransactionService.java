@@ -58,7 +58,7 @@ public class TransactionService {
 	}
 	
 
-	public void createSale(List<TransactionDTO> transactions) throws ProductException {
+	public void sendTransactions(List<TransactionDTO> transactions) throws ProductException {
 		StringBuilder path = this.inventoryConfig.getURLPrefix().append(this.inventoryConfig.getRoot());
 		if (!validate(transactions)) {
 			throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
@@ -68,25 +68,11 @@ public class TransactionService {
 				HttpEntity<TransactionDTO> entity = new HttpEntity<TransactionDTO>(t);
 				path.append("/")
 					.append(t.getProduct().getId())
-					.append("/output");
+					.append("/transaction");
 				rest.exchange(path.toString(), HttpMethod.POST, entity, TransactionDTO.class);
 			}
 		});
 	}
-	
-	public void createPurchase(List<TransactionDTO> transactions) throws ProductException {
-		StringBuilder path = this.inventoryConfig.getURLPrefix().append(this.inventoryConfig.getRoot());
-		
-		if (!validate(transactions)) {
-			throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
-		}
-		transactions.stream().forEach(t -> {
-			HttpEntity<TransactionDTO> entity = new HttpEntity<TransactionDTO>(t);
-			path.append("/")
-			.append(t.getProduct().getId())
-			.append("/input");
-			rest.exchange(path.toString(), HttpMethod.POST, entity, TransactionDTO.class);
-		});
-	}
+
 
 }

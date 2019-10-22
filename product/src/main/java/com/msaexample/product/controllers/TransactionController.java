@@ -22,26 +22,15 @@ public class TransactionController {
 	private TransactionService service;
 	
 	
-	@PostMapping("/sale")
-	public ResponseEntity<?> createSaleTransaction(@RequestBody List<TransactionDTO> transactions) {
+	@PostMapping
+	public ResponseEntity<?> createTransaction(@RequestBody List<TransactionDTO> transactions) {
 		try {
-			this.service.createSale(transactions);
-			return ResponseEntity.ok().body("Sale succeffuly created.");
+			this.service.sendTransactions(transactions);
+			return ResponseEntity.ok().body("Transactions succeffuly created.");
 		} catch (ProductException e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 	
-	@PostMapping("/purchase")
-	public ResponseEntity<?> createBuyTransaction(@RequestBody List<TransactionDTO> transactions) {
-		try {
-			this.service.createPurchase(transactions);
-			return ResponseEntity.ok().body("Purchase succeffuly created.");
-		} catch (ProductException e) {
-			e.printStackTrace();
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
-
 }
