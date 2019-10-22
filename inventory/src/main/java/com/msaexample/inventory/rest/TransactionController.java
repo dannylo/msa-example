@@ -21,21 +21,13 @@ public class TransactionController {
 	@Autowired
 	private InventoryService inventoryService;
 	
-	@PostMapping("/{idProduct}/input")
-	public ResponseEntity<?> registerInput(@RequestBody Transaction transaction, @PathVariable("idProduct") int idProduct) {
+	@PostMapping("/{idProduct}/transaction")
+	public ResponseEntity<?> registerTransactions(@RequestBody Transaction transaction, @PathVariable("idProduct") int idProduct) {
 		try {
-			return new ResponseEntity<Inventory>(this.inventoryService.increaseInventory(transaction, idProduct), HttpStatus.OK) ;
+			return new ResponseEntity<Inventory>(this.inventoryService.createTransaction(transaction, idProduct), HttpStatus.OK) ;
 		} catch (InventoryException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 	
-	@PostMapping("/{idProduct}/output")
-	public ResponseEntity<?> registerOutput(@RequestBody Transaction transaction, @PathVariable("idProduct") int idProduct) {
-		try {
-			return new ResponseEntity<Inventory>(this.inventoryService.decreaseInventory(transaction, idProduct), HttpStatus.OK) ;
-		} catch (InventoryException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
 }

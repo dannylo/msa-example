@@ -42,40 +42,31 @@ public class InventoryService {
 	}
 
 	@Transactional
-	public Inventory increaseInventory(Transaction transaction, int idProduct) throws InventoryException {
+	public Inventory createTransaction(Transaction transaction, int idProduct) throws InventoryException {
 		transaction.setInventory(this.getByProduct(idProduct));
-		transaction.setType(TypeTransaction.BUY);
 		transaction.setDate(LocalDate.now());
 
 		if (transaction.getInventory() == null) {
 			throw new InventoryException(ExceptionMessage.INVENTORY_NOT_FOUND);
 		}
-
-		transaction.getInventory().increase(transaction.getQtd());
-		transactionRepository.save(transaction);
-
-		return this.save(transaction.getInventory());
-	}
-
-	@Transactional
-	public Inventory decreaseInventory(Transaction transaction, int idProduct) throws InventoryException {
-		transaction.setInventory(this.getByProduct(idProduct));
-
-		transaction.setType(TypeTransaction.SALE);
-		transaction.setDate(LocalDate.now());
-
-		if (transaction.getInventory() == null) {
-			throw new InventoryException(ExceptionMessage.INVENTORY_NOT_FOUND);
-		} else if (transaction.getInventory().getQtdAvailable() < transaction.getQtd()) {
-			throw new InventoryException(ExceptionMessage.INVENTORY_QUANTITY_INVALID);
+		
+		if(transaction.getQtd() < 0) {
+			//normalizando quantidade.
+			transaction.setQtd(transaction.getQtd() * -1);
+			if (transaction.getInventory().getQtdAvailable() < transaction.getQtd()) {
+				throw new InventoryException(ExceptionMessage.INVENTORY_QUANTITY_INVALID);
+			}
+			transaction.setType(TypeTransaction.SALE);
+			transaction.getInventory().decrease(transaction.getQtd());
+		} else {
+			transaction.setType(TypeTransaction.BUY);
+			transaction.getInventory().increase(transaction.getQtd());
 		}
-
-		transaction.setInventory(transaction.getInventory());
+		
+		transaction.getInventory().setLastUpdated(LocalDate.now());
 		transactionRepository.save(transaction);
-
-		transaction.getInventory().decrease(transaction.getQtd());
 		return this.save(transaction.getInventory());
-
 	}
+
 
 }
