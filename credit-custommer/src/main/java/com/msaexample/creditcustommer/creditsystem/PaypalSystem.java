@@ -1,20 +1,14 @@
 package com.msaexample.creditcustommer.creditsystem;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.msaexample.creditcustommer.dto.CustomerData;
 
-import com.msaexample.creditcustommer.service.CreditHistoryService;
-
-@Component
-public class PaypalSystem implements ICreditSystem {
+public class PaypalSystem implements CreditSystem {
 	
-	@Autowired
-	private CreditHistoryService creditHistoryService;
-
 	@Override
-	public String execute() {
-		//TODO: implementar integração com sistema Paypal.
-		return null;
+	public String execute(CustomerData data) {
+		//TODO Paypal payment implementation.
+		
+		return "Status: OK";
 	}
 
 }
