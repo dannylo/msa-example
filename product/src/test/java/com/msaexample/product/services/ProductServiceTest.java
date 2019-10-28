@@ -18,6 +18,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public class ProductServiceTest {
 
@@ -109,5 +110,47 @@ public class ProductServiceTest {
 		when(inventoryConfig.getURLPrefix()).thenReturn(new StringBuilder("http://localhost:8081"));
 
 		this.service.save(product);
+	}
+	
+	@Test
+	public void buscarProdutoPorIdValido() throws ProductException {
+		Product product = new Product();
+		product.setDescription("Test Product");
+		product.setName("Test Product 2");
+		product.setUnitPrice(BigDecimal.TEN);
+
+		Optional<Product> opt = Optional.of(product);
+		when(repository.findById(2)).thenReturn(opt);
+
+		Product result = service.getById(2);
+		Assert.assertSame(product, result);
+	}
+	
+	@Test(expected = ProductException.class)
+	public void buscarProdutoPorIdInvalido() throws ProductException {
+		Product product = new Product();
+		product.setDescription("Test Product");
+		product.setName("Test Product 2");
+		product.setUnitPrice(BigDecimal.TEN);
+
+		Optional<Product> opt = Optional.of(product);
+		when(repository.findById(2)).thenReturn(opt);
+
+		Product result = service.getById(0);
+	}
+	
+	@Test(expected = ProductException.class)
+	public void buscarProdutoPorIdInexistente() throws ProductException {
+		Product product = new Product();
+		product.setDescription("Test Product");
+		product.setName("Test Product 2");
+		product.setUnitPrice(BigDecimal.TEN);
+
+		Optional<Product> opt = Optional.of(product);
+		
+		when(repository.findById(2)).thenReturn(opt);
+		when(repository.findById(1)).thenReturn(Optional.empty());
+
+		Product result = service.getById(1);
 	}
 }
