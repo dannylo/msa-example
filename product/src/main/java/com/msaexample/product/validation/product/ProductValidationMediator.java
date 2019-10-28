@@ -18,7 +18,8 @@ public class ProductValidationMediator extends AbstractValidationMediator<Produc
 		BusinessInvalidation invalidations = this.getBusinessInvalidation();
 		
 		    invalidations
-		    	.withRule(new ProductUnitPriceZeroRule(product))
+	    		.withRule(new ProductUnitPriceNullRule(product))
+		    	.withRule(new ProductInvalidUnitPriceRule(product))
 		    	.withRule(new ProductNameEmptyRule(product))
 		    	.exists();
 		
