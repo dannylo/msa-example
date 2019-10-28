@@ -31,8 +31,12 @@ public class ProductController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Product> save(@RequestBody Product product){
-		return new ResponseEntity<Product> (this.service.save(product), HttpStatus.OK);
+	public ResponseEntity<?> save(@RequestBody Product product){
+		try {
+			return new ResponseEntity<Product> (this.service.save(product), HttpStatus.OK);
+		} catch (ProductException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 	
 	@GetMapping("/{id}")

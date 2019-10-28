@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.msaexample.product.config.InventoryConfig;
@@ -22,6 +23,8 @@ import com.msaexample.product.enums.ExceptionMessages;
 import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.repository.ProductRepository;
 import com.msaexample.product.rest.handleexception.RestTemplateResponseErrorHandler;
+import com.msaexample.product.validation.ValidationMediator;
+import com.msaexample.product.validation.product.ProductValidationMediator;
 
 @Service
 public class ProductService {
@@ -34,6 +37,7 @@ public class ProductService {
 
 	private RestTemplate restTemplate;
 
+	private ValidationMediator<Product> validator = new ProductValidationMediator();
 	@Autowired
 	private RestTemplateResponseErrorHandler errorHandler;
 
@@ -44,14 +48,16 @@ public class ProductService {
 	}
 
 	@Transactional
-	public Product save(Product newProduct) {
+	public Product save(Product newProduct) throws ProductException {
+		if (validator.verify(newProduct).exists()) {
+			throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
+		}
 		StringBuilder inventoryPath = this.inventoryConfig.getURLPrefix().append(this.inventoryConfig.getRoot());
 
 		newProduct = this.repository.save(newProduct);
 		InventoryDTO inventory = this.getDefaultInventory(newProduct);
 		HttpEntity<InventoryDTO> entity = new HttpEntity<InventoryDTO>(inventory);
-		restTemplate.exchange(inventoryPath.toString(), HttpMethod.POST, entity,
-				InventoryDTO.class);
+		restTemplate.exchange(inventoryPath.toString(), HttpMethod.POST, entity, InventoryDTO.class);
 
 		return newProduct;
 	}

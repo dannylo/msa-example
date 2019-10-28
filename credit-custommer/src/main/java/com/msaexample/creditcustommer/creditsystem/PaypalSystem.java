@@ -6,9 +6,14 @@ public class PaypalSystem implements CreditSystem {
 	
 	@Override
 	public String execute(CustomerData data) {
-		//TODO Paypal payment implementation.
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
-		return "Status: OK";
+		//simulated response.
+		return "{ Status: OK, PaypalID: 32384349958 } ";
 	}
 
 }
