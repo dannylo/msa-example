@@ -1,6 +1,8 @@
 package com.msaexample.inventory.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.msaexample.inventory.domain.Inventory;
 import com.msaexample.inventory.domain.Transaction;
+import com.msaexample.inventory.dto.BundleDTO;
+import com.msaexample.inventory.dto.OrderTransanction;
 import com.msaexample.inventory.enums.ExceptionMessage;
 import com.msaexample.inventory.enums.TypeTransaction;
 import com.msaexample.inventory.exceptions.InventoryException;
@@ -42,16 +46,29 @@ public class InventoryService {
 	}
 
 	@Transactional
-	public Inventory createTransaction(Transaction transaction, int idProduct) throws InventoryException {
-		transaction.setInventory(this.getByProduct(idProduct));
-		transaction.setDate(LocalDate.now());
+	public BundleDTO createTransaction(List<OrderTransanction> bundle) throws InventoryException {
+		List<Transaction> transactions = new ArrayList<>();
 
+		bundle.forEach(order -> {
+			Transaction transaction = order.convert();
+			transaction.setDate(LocalDate.now());
+
+			transaction.setInventory(this.getByProduct(order.getProduct()));
+			this.prepareTransaction(transaction);
+			this.save(transaction.getInventory());
+			transactions.add(transaction);
+		});
+
+		return new BundleDTO(transactions.stream().findFirst().get().getType(), transactions);
+	}
+
+	private void prepareTransaction(Transaction transaction) throws InventoryException {
 		if (transaction.getInventory() == null) {
 			throw new InventoryException(ExceptionMessage.INVENTORY_NOT_FOUND);
 		}
-		
-		if(transaction.getQtd() < 0) {
-			//normalizando quantidade.
+
+		if (transaction.getQtd() < 0) {
+			// normalizando quantidade.
 			transaction.setQtd(transaction.getQtd() * -1);
 			if (transaction.getInventory().getQtdAvailable() < transaction.getQtd()) {
 				throw new InventoryException(ExceptionMessage.INVENTORY_QUANTITY_INVALID);
@@ -62,11 +79,9 @@ public class InventoryService {
 			transaction.setType(TypeTransaction.BUY);
 			transaction.getInventory().increase(transaction.getQtd());
 		}
-		
+
 		transaction.getInventory().setLastUpdated(LocalDate.now());
 		transactionRepository.save(transaction);
-		return this.save(transaction.getInventory());
 	}
-
 
 }

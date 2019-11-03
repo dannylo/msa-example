@@ -2,7 +2,7 @@ package com.msaexample.inventory.exceptions;
 
 import com.msaexample.inventory.enums.ExceptionMessage;
 
-public class InventoryException extends Exception {
+public class InventoryException extends RuntimeException {
 	
 	private ExceptionMessage exceptionMessage;
 	
