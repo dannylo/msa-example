@@ -26,9 +26,10 @@ public class TransactionController {
 	@Autowired
 	private InventoryService inventoryService;
 	
-	//O processamento das transações é em lote, sendo assim, várias transações são processadas por operação
-	//A resposta é um BundleDTO, contendo as transações cadastradas e o tipo da operação.
-	@PostMapping("/{idProduct}/transaction")
+	/* O processamento das transações é em lote, sendo assim, várias transações são processadas por operação
+	  A resposta é um BundleDTO, contendo as transações cadastradas e o tipo da operação. */
+	
+	@PostMapping("/transaction")
 	public ResponseEntity<?> registerTransactions(@RequestBody List<OrderTransanction> bundle) {
 		try {
 			return new ResponseEntity<BundleDTO>(this.inventoryService.createTransaction(bundle), HttpStatus.OK) ;
