@@ -6,15 +6,15 @@ import com.msaexample.product.domain.Product;
 
 public class TransactionDTO {
 	
-	private Product product;
+	private int product;
 	private int qtd;
 	private BigDecimal total;
 
-	public Product getProduct() {
+	public int getProduct() {
 		return product;
 	}
 
-	public void setProduct(Product product) {
+	public void setProduct(int product) {
 		this.product = product;
 	}
 

@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.msaexample.product.amqp.sender.SenderCreditOrder;
 import com.msaexample.product.config.InventoryConfig;
+import com.msaexample.product.domain.Product;
 import com.msaexample.product.dto.BundleTransactionDTO;
 import com.msaexample.product.dto.TransactionDTO;
 import com.msaexample.product.enums.ExceptionMessages;
@@ -47,25 +48,26 @@ public class TransactionService {
 		this.rest.setErrorHandler(errorHandler);
 	}
 
-	private boolean validateProducts(List<TransactionDTO> transactions) {
+	private boolean validateTransactions(List<TransactionDTO> transactions) {
 		transactions.stream().map(t -> {
 			try {
-				t.setProduct(productService.getById(t.getProduct().getId()));
-				t.setTotal(t.getProduct().getUnitPrice().multiply(new BigDecimal(t.getQtd())));
+				Product product = this.productService.getById(t.getProduct());
+				t.setProduct(product.getId());
+				t.setTotal(product.getUnitPrice().multiply(new BigDecimal(t.getQtd())));
 			} catch (ProductException e) {
-				t.setProduct(null);
+				t.setProduct(0);
 				e.printStackTrace();
 			}
 			return t;
 		});
-		boolean dontValidated = transactions.stream().anyMatch(t -> t.getProduct() == null);
+		boolean dontValidated = transactions.stream().anyMatch(t -> t.getProduct() == 0);
 
 		return dontValidated;
 	}
 
 	public BundleTransactionDTO sendTransactions(List<TransactionDTO> transactions) throws ProductException, InventoryApiException {
 		StringBuilder path = this.inventoryConfig.getURLPrefix().append(this.inventoryConfig.getRoot());
-		if (!validateProducts(transactions)) {
+		if (!validateTransactions(transactions)) {
 			throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
 		}
 
