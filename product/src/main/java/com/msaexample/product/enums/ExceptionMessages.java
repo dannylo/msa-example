@@ -3,6 +3,7 @@ package com.msaexample.product.enums;
 public enum ExceptionMessages {
 
 	PRODUCTS_NOT_FOUND ("Product not found"),
+	PRODUCTS_UNAVAILABLE ("Product is Unavailable"),
 	PRODUCTS_INVALID ("Product is invalid for this operation."),
 	
 	INVENTORY_SERVER_ERROR ("An error ocurred in inventory API comunication."),

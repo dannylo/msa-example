@@ -11,10 +11,13 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import com.msaexample.product.amqp.sender.SenderCreditOrder;
 import com.msaexample.product.config.InventoryConfig;
 import com.msaexample.product.domain.Product;
 import com.msaexample.product.dto.InventoryDTO;
@@ -38,6 +41,7 @@ public class ProductService {
 	private RestTemplate restTemplate;
 
 	private ValidationMediator<Product> validator = new ProductValidationMediator();
+	
 	@Autowired
 	private RestTemplateResponseErrorHandler errorHandler;
 
@@ -57,8 +61,7 @@ public class ProductService {
 		newProduct = this.repository.save(newProduct);
 		InventoryDTO inventory = this.getDefaultInventory(newProduct);
 		HttpEntity<InventoryDTO> entity = new HttpEntity<InventoryDTO>(inventory);
-		restTemplate.exchange(inventoryPath.toString(), HttpMethod.POST, entity, InventoryDTO.class);
-
+		
 		return newProduct;
 	}
 

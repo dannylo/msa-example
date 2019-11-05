@@ -40,7 +40,7 @@ public class ProductServiceTest {
 	}
 
 	@Test
-	public void salvandoProdutoValido() {
+	public void savingValidProduct() {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("Test name");
@@ -59,7 +59,7 @@ public class ProductServiceTest {
 	}
 
 	@Test(expected = ProductException.class)
-	public void salvandoProdutoComValorZerado() throws ProductException {
+	public void savingProductWithPriceZero() throws ProductException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("Test name");
@@ -72,7 +72,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test(expected = ProductException.class)
-	public void salvandoProdutoComValorNegativo() throws ProductException {
+	public void savingProductWithNegativePrice() throws ProductException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("Test name");
@@ -85,7 +85,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test(expected = ProductException.class)
-	public void salvandoProdutoComValorNull() throws ProductException {
+	public void savingProductWithNullPrice() throws ProductException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("Test name");
@@ -100,7 +100,7 @@ public class ProductServiceTest {
 
 
 	@Test(expected = ProductException.class)
-	public void salvandoProdutoComNomeVazio() throws ProductException {
+	public void savingProductWithEmptyName() throws ProductException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("");
@@ -113,7 +113,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test
-	public void buscarProdutoPorIdValido() throws ProductException {
+	public void searchProductByValidId() throws ProductException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("Test Product 2");
@@ -127,7 +127,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test(expected = ProductException.class)
-	public void buscarProdutoPorIdInvalido() throws ProductException {
+	public void searchProductByInvalidId() throws ProductException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("Test Product 2");
@@ -140,7 +140,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test(expected = ProductException.class)
-	public void buscarProdutoPorIdInexistente() throws ProductException {
+	public void searchProductByInexistentId() throws ProductException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("Test Product 2");
@@ -152,5 +152,36 @@ public class ProductServiceTest {
 		when(repository.findById(1)).thenReturn(Optional.empty());
 
 		Product result = service.getById(1);
+	}
+	
+	@Test(expected = ProductException.class)
+	public void updatingProductNotStored() throws ProductException {
+		Product product = new Product();
+		product.setDescription("Test Product");
+		product.setName("Test Product 2");
+		product.setUnitPrice(BigDecimal.TEN);
+
+		Optional<Product> opt = Optional.of(product);
+		
+		when(repository.findById(2)).thenReturn(opt);
+		when(repository.findById(1)).thenReturn(Optional.empty());
+		
+		product.setId(1);
+		
+		service.updated(product);
+	}
+	
+	@Test(expected = ProductException.class)
+	public void deletingProductNotStored() throws ProductException {
+		Product product = new Product();
+		product.setId(1);
+		
+		Optional<Product> opt = Optional.of(product);
+		
+		when(repository.findById(2)).thenReturn(opt);
+		when(repository.findById(1)).thenReturn(Optional.empty());
+		
+		
+		service.remove(product);
 	}
 }

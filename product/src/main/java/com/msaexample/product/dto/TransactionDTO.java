@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import com.msaexample.product.domain.Product;
 
 public class TransactionDTO {
-
+	
 	private Product product;
 	private int qtd;
 	private BigDecimal total;
