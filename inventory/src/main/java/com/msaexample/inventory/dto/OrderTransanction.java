@@ -5,7 +5,8 @@ import java.math.BigDecimal;
 import com.msaexample.inventory.domain.Transaction;
 
 public class OrderTransanction {
-	private int product;
+	
+	private int productId;
 	private int qtd;
 	private BigDecimal total;
 	
@@ -16,14 +17,13 @@ public class OrderTransanction {
 		
 		return transaction;
 	}
-	
 
-	public int getProduct() {
-		return product;
+	public int getProductId() {
+		return productId;
 	}
 
-	public void setProduct(int product) {
-		this.product = product;
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
 
 	public int getQtd() {

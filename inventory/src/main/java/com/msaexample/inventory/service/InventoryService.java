@@ -52,14 +52,13 @@ public class InventoryService {
 		bundle.forEach(order -> {
 			Transaction transaction = order.convert();
 			transaction.setDate(LocalDate.now());
-
-			transaction.setInventory(this.getByProduct(order.getProduct()));
+			transaction.setInventory(this.getByProduct(order.getProductId()));
 			this.prepareTransaction(transaction);
 			this.save(transaction.getInventory());
 			transactions.add(transaction);
 		});
-
-		return new BundleDTO(transactions.stream().findFirst().get().getType(), transactions);
+		
+		return new BundleDTO(transactions.stream().findFirst().get().getType(), LocalDate.now());
 	}
 
 	private void prepareTransaction(Transaction transaction) throws InventoryException {
@@ -73,10 +72,10 @@ public class InventoryService {
 			if (transaction.getInventory().getQtdAvailable() < transaction.getQtd()) {
 				throw new InventoryException(ExceptionMessage.INVENTORY_QUANTITY_INVALID);
 			}
-			transaction.setType(TypeTransaction.SALE);
+			transaction.setType(TypeTransaction.DECREASE);
 			transaction.getInventory().decrease(transaction.getQtd());
 		} else {
-			transaction.setType(TypeTransaction.BUY);
+			transaction.setType(TypeTransaction.INCREASE);
 			transaction.getInventory().increase(transaction.getQtd());
 		}
 

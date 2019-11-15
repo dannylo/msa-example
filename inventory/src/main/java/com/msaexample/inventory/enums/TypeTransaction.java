@@ -2,8 +2,8 @@ package com.msaexample.inventory.enums;
 
 public enum TypeTransaction {
 	
-	SALE("Sale"),
-	BUY("Buy");
+	DECREASE("Decrease"),
+	INCREASE("Increase");
 	
 	private String type;
 	

@@ -1,18 +1,17 @@
 package com.msaexample.inventory.dto;
 
-import java.util.List;
+import java.time.LocalDate;
 
-import com.msaexample.inventory.domain.Transaction;
 import com.msaexample.inventory.enums.TypeTransaction;
 
 public class BundleDTO {
 
 	private TypeTransaction operation;
-	private List<Transaction> transactions;
+	private LocalDate update;
 	
-	public BundleDTO(TypeTransaction operation, List<Transaction> transactions) {
+	public BundleDTO(TypeTransaction operation, LocalDate update) {
+		this.update = update;
 		this.operation = operation;
-		this.transactions = transactions;
 	}
 
 	public TypeTransaction getOperation() {
@@ -23,12 +22,14 @@ public class BundleDTO {
 		this.operation = operation;
 	}
 
-	public List<Transaction> getTransactions() {
-		return transactions;
+	public LocalDate getUpdate() {
+		return update;
 	}
 
-	public void setTransactions(List<Transaction> transactions) {
-		this.transactions = transactions;
+	public void setUpdate(LocalDate update) {
+		this.update = update;
 	}
+
+	
 
 }
