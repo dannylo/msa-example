@@ -2,20 +2,23 @@ package com.msaexample.product.dto;
 
 import java.math.BigDecimal;
 
-import com.msaexample.product.domain.Product;
-
 public class TransactionDTO {
-	
-	private int product;
+
+	private int productId;
 	private int qtd;
 	private BigDecimal total;
-
-	public int getProduct() {
-		return product;
+	
+	public TransactionDTO(int productId, int qtd) {
+		this.productId = productId;
+		this.qtd = qtd;
 	}
 
-	public void setProduct(int product) {
-		this.product = product;
+	public int getProductId() {
+		return productId;
+	}
+
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
 
 	public int getQtd() {
@@ -33,5 +36,7 @@ public class TransactionDTO {
 	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
+	
+	
 
 }

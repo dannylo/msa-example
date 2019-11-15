@@ -13,12 +13,12 @@ public class SenderCreditOrder implements Sender<CreditCard> {
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
 	
-	@Autowired
-	private Queue queue;
+//	@Autowired
+//	private Queue queue;
 	
 	@Override
 	public void send(CreditCard credit) {
-		rabbitTemplate.convertAndSend(queue.getName(), credit);
+		//rabbitTemplate.convertAndSend(queue.getName(), credit);
 	}
 
 	
