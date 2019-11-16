@@ -2,6 +2,8 @@ package com.msaexample.product.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ public class CustomerController {
 	
 	@Autowired
 	private CustomerService customerService;
+
+	private Logger logger = LoggerFactory.getLogger(CustomerController.class);
 	
 	@PostMapping
 	public ResponseEntity<Customer> save(@RequestBody Customer customer){
@@ -39,6 +43,7 @@ public class CustomerController {
 		try {
 			return new ResponseEntity<Customer>(this.customerService.getById(id), HttpStatus.OK);
 		} catch (CustomerException e) {
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
@@ -48,6 +53,7 @@ public class CustomerController {
 		try {
 			return new ResponseEntity<Customer>(this.customerService.update(customer), HttpStatus.OK);
 		} catch (CustomerException e) {
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}

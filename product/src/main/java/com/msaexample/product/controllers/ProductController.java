@@ -2,6 +2,8 @@ package com.msaexample.product.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ public class ProductController {
 	@Autowired
 	private ProductService service;
 	
+	private Logger logger = LoggerFactory.getLogger(ProductController.class);
+	
 	@GetMapping
 	public ResponseEntity<List<Product>> getAll(){
 		return new ResponseEntity<List<Product>>(this.service.getAll(), HttpStatus.OK);
@@ -35,6 +39,7 @@ public class ProductController {
 		try {
 			return new ResponseEntity<Product> (this.service.save(product), HttpStatus.OK);
 		} catch (ProductException e) {
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
@@ -44,6 +49,7 @@ public class ProductController {
 		try {
 			return new ResponseEntity<Product>(this.service.getById(id), HttpStatus.OK);
 		} catch (ProductException e) {
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
@@ -53,6 +59,7 @@ public class ProductController {
 		try {
 			return new ResponseEntity<Product> (this.service.updated(product), HttpStatus.OK);
 		} catch (ProductException e) {
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
@@ -63,6 +70,7 @@ public class ProductController {
 			this.service.remove(product);
 			return ResponseEntity.ok().body("Product was removed.");
 		} catch (ProductException e) {
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}

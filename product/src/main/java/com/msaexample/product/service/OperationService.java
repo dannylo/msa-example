@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.msaexample.product.amqp.sender.SenderCreditOrder;
 import com.msaexample.product.domain.Operation;
 import com.msaexample.product.domain.Request;
 import com.msaexample.product.dto.BundleDTO;
@@ -35,6 +38,11 @@ public class OperationService {
 
 	@Autowired
 	private TransactionServiceRequest serviceRequest;
+	
+	@Autowired
+	private SenderCreditOrder sender;
+	
+	private Logger logger = LoggerFactory.getLogger(OperationService.class);
 
 
 	private boolean validateRequests(List<Request> requests) {
@@ -45,7 +53,7 @@ public class OperationService {
 						new BigDecimal(r.getQtd() * -1)));
 			} catch (ProductException e) {
 				r.setProduct(null);
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		});
 
@@ -61,6 +69,7 @@ public class OperationService {
 
 		operation.setCustomer(this.customerService.getById(operation.getCustomer().getId()));
 		this.serviceRequest.processTransactions(operation.getRequests());
+		this.sender.send(operation.getCustomer().getCreditCard());
 		return repository.save(operation);
 	}
 

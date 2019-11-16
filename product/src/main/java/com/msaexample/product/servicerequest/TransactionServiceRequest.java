@@ -33,14 +33,8 @@ import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.rest.handleexception.RestTemplateResponseErrorHandler;
 import com.msaexample.product.service.ProductService;
 /*
- TODO: Refatorar a classe para TransactionServiceRequest (pois não é um serviço própio do MS)
- , e um método que deve salvar o grupo de transações, atrelando ao customer. Deve salvar, se
- o serviço de inventário conseguir processar o pedido das transações, e em seguida solicitar 
+ TODO: Deve salvar, se o serviço de inventário conseguir processar o pedido das transações, e em seguida solicitar 
  o crédito no Broker. Em caso negativo, um rollback deve ser realizado.
- 
- * Usar LOGS no lugar do printStackTrace
- * Associar Customer ao grupo de transações processadas
- * Verificar o uso de DTOs no inventário (MS)
  * 
 */
 @Component
@@ -55,12 +49,6 @@ public class TransactionServiceRequest {
 
 	@Autowired
 	private InventoryConfig inventoryConfig;
-
-	@Autowired
-	private ProductService productService;
-
-	@Autowired
-	private SenderCreditOrder sender;
 
 	@PostConstruct
 	public void init() {
