@@ -2,6 +2,8 @@ package com.msaexample.inventory.rest;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class TransactionController {
 	@Autowired
 	private InventoryService inventoryService;
 	
+	private Logger logger = LoggerFactory.getLogger(InventoryController.class);
+
+	
 	/* O processamento das transações é em lote, sendo assim, várias transações são processadas por operação
 	  A resposta é um BundleDTO, contendo as transações cadastradas e o tipo da operação. */
 	
@@ -34,6 +39,7 @@ public class TransactionController {
 		try {
 			return new ResponseEntity<BundleDTO>(this.inventoryService.createTransaction(bundle), HttpStatus.OK) ;
 		} catch (InventoryException e) {
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}

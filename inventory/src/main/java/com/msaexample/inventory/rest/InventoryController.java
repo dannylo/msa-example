@@ -1,6 +1,8 @@
 package com.msaexample.inventory.rest;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,9 @@ public class InventoryController {
 
 	@Autowired
 	private InventoryService service;
+	
+	private Logger logger = LoggerFactory.getLogger(InventoryController.class);
+
 
 	@PostMapping
 	public ResponseEntity<Inventory> save(@RequestBody Inventory inventory){
@@ -35,6 +40,7 @@ public class InventoryController {
 		try {
 			return new ResponseEntity<Inventory> (this.service.getByProduct(idProduct), HttpStatus.OK);
 		} catch (InventoryException e) {
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
