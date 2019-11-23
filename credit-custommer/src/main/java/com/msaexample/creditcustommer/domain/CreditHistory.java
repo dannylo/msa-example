@@ -22,8 +22,8 @@ public class CreditHistory {
 	public long id;
 	@Column(name = "processing_date", nullable = false)
 	public LocalDate processingDate;
-	@Column(nullable = false)
-	private int idCustomer;
+	@Column(name = "operation_id")
+	public long operationId;
 	private BigDecimal value;
 	@Enumerated
 	private Status status;
@@ -43,13 +43,13 @@ public class CreditHistory {
 	public void setProcessingDate(LocalDate processingDate) {
 		this.processingDate = processingDate;
 	}
-
-	public int getIdCustomer() {
-		return idCustomer;
+	
+	public long getOperationId() {
+		return operationId;
 	}
 
-	public void setIdCustomer(int idCustomer) {
-		this.idCustomer = idCustomer;
+	public void setOperationId(long operationId) {
+		this.operationId = operationId;
 	}
 
 	public BigDecimal getValue() {

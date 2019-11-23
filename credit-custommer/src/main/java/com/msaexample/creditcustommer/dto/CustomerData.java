@@ -7,41 +7,37 @@ import com.msaexample.creditcustommer.enums.PaymentSystem;
 public class CustomerData {
 	
 	private PaymentSystem paymentSystem;
-	private String cardNumber;
-	private int securityCode;
-	private String date;
-	private BigDecimal value;
-
-	public String getCardNumber() {
-		return cardNumber;
+	private long operationId;
+	private CreditCard creditCard;
+	private BigDecimal valueRequested;
+	private String result;
+	
+	public String performPayment() {
+		return this.paymentSystem.executeOperation(this);
+	}
+	
+	public long getOperationId() {
+		return operationId;
 	}
 
-	public void setCardNumber(String cardNumber) {
-		this.cardNumber = cardNumber;
+	public void setOperationId(long operationId) {
+		this.operationId = operationId;
 	}
 
-	public int getSecurityCode() {
-		return securityCode;
+	public CreditCard getCreditCard() {
+		return creditCard;
 	}
 
-	public void setSecurityCode(int securityCode) {
-		this.securityCode = securityCode;
+	public void setCreditCard(CreditCard creditCard) {
+		this.creditCard = creditCard;
 	}
 
-	public String getDate() {
-		return date;
+	public BigDecimal getValueRequested() {
+		return valueRequested;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public BigDecimal getValue() {
-		return value;
-	}
-
-	public void setValue(BigDecimal value) {
-		this.value = value;
+	public void setValueRequested(BigDecimal valueRequested) {
+		this.valueRequested = valueRequested;
 	}
 
 	public PaymentSystem getPaymentSystem() {
@@ -51,7 +47,13 @@ public class CustomerData {
 	public void setPaymentSystem(PaymentSystem paymentSystem) {
 		this.paymentSystem = paymentSystem;
 	}
-	
-	
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
 
 }
