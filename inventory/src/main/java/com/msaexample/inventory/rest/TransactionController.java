@@ -30,10 +30,6 @@ public class TransactionController {
 	
 	private Logger logger = LoggerFactory.getLogger(InventoryController.class);
 
-	
-	/* O processamento das transações é em lote, sendo assim, várias transações são processadas por operação
-	  A resposta é um BundleDTO, contendo as transações cadastradas e o tipo da operação. */
-	
 	@PostMapping("/transaction")
 	public ResponseEntity<?> registerTransactions(@RequestBody List<OrderTransanction> bundle) {
 		try {
