@@ -5,8 +5,7 @@ import com.msaexample.creditcustommer.dto.CustomerData;
 
 public enum PaymentSystem {
 
-	PAGSEGURO(1, new PagSeguroSystem()),
-	PAYPAL(2, new PaypalSystem());
+	PAGSEGURO(1, new PagSeguroSystem());
 	
    PaymentSystem(int code, CreditSystem creditSystem) {
 		this.creditSystem = creditSystem;
@@ -15,7 +14,7 @@ public enum PaymentSystem {
 	private CreditSystem creditSystem;
 	private int code;
 	
-	public String executeOperation(CustomerData data) {
+	public CreditResponse executeOperation(CustomerData data) {
 		return this.creditSystem.execute(data);
 	}
 

@@ -2,6 +2,7 @@ package com.msaexample.creditcustommer.dto;
 
 import java.math.BigDecimal;
 
+import com.msaexample.creditcustommer.creditsystem.CreditResponse;
 import com.msaexample.creditcustommer.enums.PaymentSystem;
 
 public class CustomerData {
@@ -10,9 +11,9 @@ public class CustomerData {
 	private long operationId;
 	private CreditCard creditCard;
 	private BigDecimal valueRequested;
-	private String result;
 	
-	public String performPayment() {
+	
+	public CreditResponse performPayment() {
 		return this.paymentSystem.executeOperation(this);
 	}
 	
@@ -47,13 +48,6 @@ public class CustomerData {
 	public void setPaymentSystem(PaymentSystem paymentSystem) {
 		this.paymentSystem = paymentSystem;
 	}
-
-	public String getResult() {
-		return result;
-	}
-
-	public void setResult(String result) {
-		this.result = result;
-	}
+	
 
 }

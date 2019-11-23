@@ -27,6 +27,8 @@ public class CreditHistory {
 	private BigDecimal value;
 	@Enumerated
 	private Status status;
+	@Column(name = "auth")
+	private long authorizationCode;
 	
 	public CreditHistory() {
 		this.processingDate = LocalDate.now();
@@ -66,6 +68,14 @@ public class CreditHistory {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public long getAuthorizationCode() {
+		return authorizationCode;
+	}
+
+	public void setAuthorizationCode(long authorizationCode) {
+		this.authorizationCode = authorizationCode;
 	}
 	
 	

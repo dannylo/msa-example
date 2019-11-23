@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
+import com.msaexample.creditcustommer.creditsystem.CreditResponse;
 import com.msaexample.creditcustommer.domain.CreditHistory;
 import com.msaexample.creditcustommer.dto.CustomerData;
+import com.msaexample.creditcustommer.dto.ResponseDTO;
 import com.msaexample.creditcustommer.enums.PaymentSystem;
 import com.msaexample.creditcustommer.enums.Status;
 import com.msaexample.creditcustommer.sender.ResultCreditSender;
@@ -28,16 +30,22 @@ public class QueueReciever {
 	@RabbitHandler
 	public void listener(@Payload CustomerData customerData) {
 		customerData.setPaymentSystem(PaymentSystem.PAGSEGURO);
-		String result = customerData.performPayment();
-		customerData.setResult(result);
+		CreditResponse result = customerData.performPayment();
+	
 		
 		CreditHistory history = new CreditHistory();
 		history.setOperationId(customerData.getOperationId());
+		history.setAuthorizationCode(result.getAuthorizationCode());
 		history.setProcessingDate(LocalDate.now());
-		history.setStatus(Status.PROCESSED);
+		history.setStatus(result.getStatus());
+		
 		service.save(history);
 		
-		sender.send(customerData);
+		ResponseDTO response = new ResponseDTO(history.getAuthorizationCode(), 
+				history.getStatus(), 
+				history.getOperationId());
+		
+		sender.send(response);
 		
 	}
 	

@@ -5,7 +5,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.msaexample.creditcustommer.domain.CreditHistory;
 import com.msaexample.creditcustommer.dto.CustomerData;
+import com.msaexample.creditcustommer.dto.ResponseDTO;
 
 
 @Component
@@ -17,8 +19,8 @@ public class ResultCreditSender {
 	@Autowired
 	private Queue queue;
 	
-	public void send(CustomerData customerData) {
-		rabbitTemplate.convertAndSend(queue.getName(), customerData);
+	public void send(ResponseDTO response) {
+		rabbitTemplate.convertAndSend(queue.getName(), response);
 	}
 	
 }
