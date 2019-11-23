@@ -1,5 +1,6 @@
 package com.msaexample.product.domain;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,6 +28,12 @@ public class Operation {
 	private Customer customer;
 	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<Request> requests;
+	private BigDecimal total;
+	
+	public void calculateTotal() {
+		this.requests.stream()
+		.forEach(r -> total = total.add(r.getTotal()));
+	}
 
 	public long getId() {
 		return id;
@@ -56,6 +63,15 @@ public class Operation {
 		this.requests = requests;
 	}
 
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
+
+	
 	
 
 }

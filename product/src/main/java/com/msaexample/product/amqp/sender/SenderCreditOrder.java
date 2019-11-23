@@ -6,19 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.msaexample.product.domain.CreditCard;
+import com.msaexample.product.dto.CreditMessageDTO;
 
 @Component
-public class SenderCreditOrder implements Sender<CreditCard> {
+public class SenderCreditOrder{
 
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
 	
-//	@Autowired
-//	private Queue queue;
+	@Autowired
+	private Queue queue;
 	
-	@Override
-	public void send(CreditCard credit) {
-		//rabbitTemplate.convertAndSend(queue.getName(), credit);
+	public void send(CreditMessageDTO message) {
+		rabbitTemplate.convertAndSend(queue.getName(), message);
 	}
 
 	

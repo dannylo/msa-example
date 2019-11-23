@@ -16,6 +16,7 @@ import com.msaexample.product.amqp.sender.SenderCreditOrder;
 import com.msaexample.product.domain.Operation;
 import com.msaexample.product.domain.Request;
 import com.msaexample.product.dto.BundleDTO;
+import com.msaexample.product.dto.CreditMessageDTO;
 import com.msaexample.product.enums.ExceptionMessages;
 import com.msaexample.product.enums.OperationType;
 import com.msaexample.product.exception.CustomerException;
@@ -66,11 +67,19 @@ public class OperationService {
 		if (!validateRequests(operation.getRequests())) {
 			throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
 		}
-
+		
+		operation.calculateTotal();
 		operation.setCustomer(this.customerService.getById(operation.getCustomer().getId()));
 		this.serviceRequest.processTransactions(operation.getRequests());
-		this.sender.send(operation.getCustomer().getCreditCard());
-		return repository.save(operation);
+		operation = repository.save(operation);
+		this.sendCreditRequest(operation); //asynchronous call.
+		return operation;
 	}
-
+	
+	private void sendCreditRequest(Operation operation){
+		CreditMessageDTO message = new CreditMessageDTO(operation.getId(), 
+				operation.getCustomer().getCreditCard(), 
+				operation.getTotal());
+		this.sender.send(message);
+	}
 }
