@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.msaexample.product.enums.StatusOperation;
+
 @Entity
 public class Product {
 
@@ -51,5 +53,8 @@ public class Product {
 	public void setUnitPrice(BigDecimal unitPrice) {
 		this.unitPrice = unitPrice;
 	}
+
+	
+	
 
 }

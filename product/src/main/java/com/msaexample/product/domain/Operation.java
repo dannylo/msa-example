@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.msaexample.product.enums.OperationType;
+import com.msaexample.product.enums.StatusOperation;
 
 @Entity
 public class Operation {
@@ -29,6 +30,12 @@ public class Operation {
 	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<Request> requests;
 	private BigDecimal total;
+	@Enumerated(EnumType.STRING)
+	private StatusOperation status;
+	
+	public Operation() {
+		setStatus(StatusOperation.PENDENT);
+	}
 	
 	public void calculateTotal() {
 		this.requests.stream()
@@ -71,6 +78,15 @@ public class Operation {
 		this.total = total;
 	}
 
+	public StatusOperation getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusOperation status) {
+		this.status = status;
+	}
+
+	
 	
 	
 

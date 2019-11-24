@@ -15,10 +15,10 @@ public class SenderCreditOrder{
 	private RabbitTemplate rabbitTemplate;
 	
 	@Autowired
-	private Queue queue;
+	private Queue orderQueue;
 	
 	public void send(CreditMessageDTO message) {
-		rabbitTemplate.convertAndSend(queue.getName(), message);
+		rabbitTemplate.convertAndSend(orderQueue.getName(), message);
 	}
 
 	

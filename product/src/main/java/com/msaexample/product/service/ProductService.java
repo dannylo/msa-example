@@ -56,6 +56,7 @@ public class ProductService {
 		if (validator.verify(newProduct).exists()) {
 			throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
 		}
+		
 		StringBuilder inventoryPath = this.inventoryConfig.getURLPrefix().append(this.inventoryConfig.getRoot());
 
 		newProduct = this.repository.save(newProduct);

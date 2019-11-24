@@ -19,6 +19,7 @@ import com.msaexample.product.dto.BundleDTO;
 import com.msaexample.product.dto.CreditMessageDTO;
 import com.msaexample.product.enums.ExceptionMessages;
 import com.msaexample.product.enums.OperationType;
+import com.msaexample.product.enums.StatusOperation;
 import com.msaexample.product.exception.CustomerException;
 import com.msaexample.product.exception.InventoryApiException;
 import com.msaexample.product.exception.ProductException;

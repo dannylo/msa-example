@@ -17,14 +17,22 @@ public class ProductApplication {
 
 	@Value("${queue.order.name}")
 	private String orderQueue;
+	
+	@Value("${queue.response.name}")
+	private String responseQueue;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProductApplication.class, args);
 	}
 
 	@Bean
-	public Queue queue() {
+	public Queue orderQueue() {
 		return new Queue(orderQueue, true);
+	}
+	
+	@Bean
+	public Queue responseQueue() {
+		return new Queue(responseQueue, true);
 	}
 
 }
