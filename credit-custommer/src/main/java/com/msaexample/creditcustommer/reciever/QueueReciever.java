@@ -32,13 +32,11 @@ public class QueueReciever {
 		customerData.setPaymentSystem(PaymentSystem.PAGSEGURO);
 		CreditResponse result = customerData.performPayment();
 	
-		
 		CreditHistory history = new CreditHistory();
 		history.setOperationId(customerData.getOperationId());
 		history.setAuthorizationCode(result.getAuthorizationCode());
 		history.setProcessingDate(LocalDate.now());
 		history.setStatus(result.getStatus());
-		
 		service.save(history);
 		
 		ResponseDTO response = new ResponseDTO(history.getAuthorizationCode(), 

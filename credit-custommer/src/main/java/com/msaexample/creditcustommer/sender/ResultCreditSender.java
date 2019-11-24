@@ -17,10 +17,10 @@ public class ResultCreditSender {
 	private RabbitTemplate rabbitTemplate;
 	
 	@Autowired
-	private Queue queue;
+	private Queue responseQueue;
 	
 	public void send(ResponseDTO response) {
-		rabbitTemplate.convertAndSend(queue.getName(), response);
+		rabbitTemplate.convertAndSend(responseQueue.getName(), response);
 	}
 	
 }
