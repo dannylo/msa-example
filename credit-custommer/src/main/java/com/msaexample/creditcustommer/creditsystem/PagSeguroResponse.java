@@ -4,6 +4,7 @@ package com.msaexample.creditcustommer.creditsystem;
 import java.io.IOException;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.msaexample.creditcustommer.enums.Status;
@@ -15,6 +16,9 @@ import com.msaexample.creditcustommer.enums.Status;
  * 
  * */
 public class PagSeguroResponse extends CreditResponse {
+	
+	private Logger logger = LoggerFactory.getLogger(PagSeguroResponse.class);
+
 
 	public PagSeguroResponse(String rawJson) {
 		super(rawJson);
@@ -22,6 +26,7 @@ public class PagSeguroResponse extends CreditResponse {
 
 	@Override
 	public void treatResponse(String rawJson) {
+		System.out.println(rawJson);
 		try {
 			JsonNode json = getMapper().readTree(rawJson);
 			if(json.get("status").asText().equals("OK")) {
@@ -31,6 +36,7 @@ public class PagSeguroResponse extends CreditResponse {
 				this.setStatus(Status.REJECTED);
 			}
 		} catch (IOException e) {
+			logger.error(e.getMessage());
 		}
 		
 	}

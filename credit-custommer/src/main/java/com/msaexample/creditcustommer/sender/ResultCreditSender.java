@@ -5,8 +5,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.msaexample.creditcustommer.domain.CreditHistory;
-import com.msaexample.creditcustommer.dto.CustomerData;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.msaexample.creditcustommer.dto.ResponseDTO;
 
 
@@ -19,8 +19,11 @@ public class ResultCreditSender {
 	@Autowired
 	private Queue responseQueue;
 	
-	public void send(ResponseDTO response) {
-		rabbitTemplate.convertAndSend(responseQueue.getName(), response);
+	private ObjectMapper mapper = new ObjectMapper();
+	
+	public void send(ResponseDTO response) throws JsonProcessingException {
+		String json = mapper.writeValueAsString(response);
+		rabbitTemplate.convertAndSend(responseQueue.getName(), json);
 	}
 	
 }

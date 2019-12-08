@@ -1,5 +1,6 @@
 package com.msaexample.creditcustommer.dto;
 
+import java.io.Serializable;
 
 public class CreditCard {
 

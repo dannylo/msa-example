@@ -11,6 +11,7 @@ public class CustomerData {
 	private long operationId;
 	private CreditCard creditCard;
 	private BigDecimal valueRequested;
+	private int result;
 	
 	
 	public CreditResponse performPayment() {
@@ -48,6 +49,15 @@ public class CustomerData {
 	public void setPaymentSystem(PaymentSystem paymentSystem) {
 		this.paymentSystem = paymentSystem;
 	}
+
+	public int getResult() {
+		return result;
+	}
+
+	public void setResult(int result) {
+		this.result = result;
+	}
+	
 	
 
 }
