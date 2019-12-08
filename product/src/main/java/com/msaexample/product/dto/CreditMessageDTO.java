@@ -9,7 +9,6 @@ public class CreditMessageDTO {
 	private long operationId;
 	private CreditCard creditCard;
 	private BigDecimal valueRequested;
-	private int result;
 	
 	public CreditMessageDTO(long operationId, CreditCard creditCard, BigDecimal valueRequested) {
 		this.operationId = operationId;
@@ -39,14 +38,6 @@ public class CreditMessageDTO {
 
 	public void setValueRequested(BigDecimal valueRequested) {
 		this.valueRequested = valueRequested;
-	}
-
-	public int getResult() {
-		return result;
-	}
-
-	public void setResult(int result) {
-		this.result = result;
 	}
 	
 	

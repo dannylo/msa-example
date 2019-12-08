@@ -8,7 +8,10 @@ public enum ExceptionMessages {
 	
 	INVENTORY_SERVER_ERROR ("An error ocurred in inventory API comunication."),
 	
-	CUSTOMERS_NOT_FOUND ("Customer not found");
+	CUSTOMERS_NOT_FOUND ("Customer not found"),
+	
+	OPERATION_NOT_FOUND ("Operation not found"),;
+	
 	
 	private String descrition;
 	

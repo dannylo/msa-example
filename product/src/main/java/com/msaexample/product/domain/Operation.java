@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import com.msaexample.product.enums.OperationType;
 import com.msaexample.product.enums.StatusOperation;
 
@@ -28,6 +31,7 @@ public class Operation {
 	@ManyToOne
 	private Customer customer;
 	@OneToMany(cascade = CascadeType.PERSIST)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Request> requests;
 	private BigDecimal total;
 	@Enumerated(EnumType.STRING)
@@ -35,6 +39,7 @@ public class Operation {
 	
 	public Operation() {
 		setStatus(StatusOperation.PENDENT);
+		setTotal(BigDecimal.ZERO);
 	}
 	
 	public void calculateTotal() {
