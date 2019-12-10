@@ -10,7 +10,9 @@ public enum ExceptionMessages {
 	
 	CUSTOMERS_NOT_FOUND ("Customer not found"),
 	
-	OPERATION_NOT_FOUND ("Operation not found"),;
+	OPERATION_NOT_FOUND ("Operation not found"),
+	
+	OPERATION_INVALID_PROCESS ("Operation not used for this process.");
 	
 	
 	private String descrition;

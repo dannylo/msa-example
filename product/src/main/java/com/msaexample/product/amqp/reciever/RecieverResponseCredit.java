@@ -41,7 +41,10 @@ public class RecieverResponseCredit {
 			
 			if (response.getStatus() == 0) {
 				operation.setStatus(StatusOperation.ACCEPT);
-			} else { operation.setStatus(StatusOperation.DENIED); }
+			} else { 
+				operation.setStatus(StatusOperation.DENIED); 
+				this.operationService.rollbackOperation(operation);
+			}
 			
 			operationService.save(operation);
 			

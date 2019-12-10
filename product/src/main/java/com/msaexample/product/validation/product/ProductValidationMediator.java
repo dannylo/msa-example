@@ -1,6 +1,5 @@
 package com.msaexample.product.validation.product;
 
-import org.hibernate.validator.internal.util.privilegedactions.GetInstancesFromServiceLoader;
 
 import com.msaexample.product.domain.Product;
 import com.msaexample.product.validation.AbstractValidationMediator;

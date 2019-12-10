@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +18,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.msaexample.product.amqp.sender.SenderCreditOrder;
 import com.msaexample.product.domain.Operation;
 import com.msaexample.product.domain.Request;
-import com.msaexample.product.dto.BundleDTO;
 import com.msaexample.product.dto.CreditMessageDTO;
 import com.msaexample.product.enums.ExceptionMessages;
 import com.msaexample.product.enums.OperationType;
 import com.msaexample.product.enums.StatusOperation;
 import com.msaexample.product.exception.CustomerException;
-import com.msaexample.product.exception.InventoryApiException;
 import com.msaexample.product.exception.OperationException;
 import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.repository.OperationRepository;
@@ -62,12 +61,23 @@ public class OperationService {
 
 		return !requests.stream().anyMatch(r -> r.getProduct() == null);
 	}
+	
+	private void sendCreditRequest(Operation operation) {
+		CreditMessageDTO message = new CreditMessageDTO(operation.getId(), operation.getCustomer().getCreditCard(),
+				operation.getTotal());
+		try {
+			this.sender.send(message);
+		} catch (JsonProcessingException e) {
+			logger.error(e.getMessage());
+		}
+	}
 
 	@Transactional
 	public Operation save(Operation operation)
 			throws ProductException, JsonParseException, JsonMappingException, IOException, CustomerException {
 
 		if (operation.getId() == 0) {
+			//first 
 			if (!validateRequests(operation.getRequests())) {
 				throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
 			}
@@ -81,17 +91,7 @@ public class OperationService {
 		operation = repository.save(operation);
 		return operation;
 	}
-
-	private void sendCreditRequest(Operation operation) {
-		CreditMessageDTO message = new CreditMessageDTO(operation.getId(), operation.getCustomer().getCreditCard(),
-				operation.getTotal());
-		try {
-			this.sender.send(message);
-		} catch (JsonProcessingException e) {
-			logger.error(e.getMessage());
-		}
-	}
-
+	
 	public Operation getById(Long id) throws OperationException {
 		Optional<Operation> opt = this.repository.findById(id);
 		if (!opt.isPresent()) {
@@ -100,4 +100,22 @@ public class OperationService {
 
 		return opt.get();
 	}
+	
+	/* The rollback possibility is only for SALE's Operation. */
+	public void rollbackOperation(Operation operation) throws JsonParseException, JsonMappingException, ProductException, IOException, OperationException {
+		if(operation.getType() == OperationType.SALE 
+				&& operation.getStatus() == StatusOperation.DENIED) {
+			List<Request> requests = operation.getRequests()
+					.stream().map(r -> {
+						r.setQtd(r.getQtd() * -1); 
+						return r;
+					}).collect(Collectors.toList());
+			
+			this.serviceRequest.processTransactions(requests);
+		} else {
+			throw new OperationException(ExceptionMessages.OPERATION_INVALID_PROCESS);
+		}
+	}
+
+	
 }
