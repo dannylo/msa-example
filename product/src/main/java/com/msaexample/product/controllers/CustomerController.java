@@ -2,6 +2,8 @@ package com.msaexample.product.controllers;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,16 @@ public class CustomerController {
 	@GetMapping
 	public ResponseEntity<List<Customer>> getAll(){
 		return new ResponseEntity<List<Customer>>(this.customerService.getAll(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/login")
+	public ResponseEntity<?> getCustomerByEmail(@PathParam("email") String email) {
+		try {
+			return new ResponseEntity<Customer>(this.customerService.getByEmail(email), HttpStatus.OK);
+		} catch (CustomerException e) {
+			logger.error(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 	
 	@GetMapping("/{id}")

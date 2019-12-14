@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.msaexample.product.domain.Customer;
 import com.msaexample.product.enums.ExceptionMessages;
@@ -23,6 +24,14 @@ public class CustomerService {
 	
 	public List<Customer> getAll(){
 		return this.repository.findAll();
+	}
+	
+	public Customer getByEmail(String email) throws CustomerException {
+		Customer customer = this.repository.findByEmail(email);
+		if(ObjectUtils.isEmpty(customer)) {
+			throw new CustomerException(ExceptionMessages.CUSTOMERS_NOT_FOUND);
+		}
+		return customer;
 	}
 	
 	public Customer getById(int id) throws CustomerException {

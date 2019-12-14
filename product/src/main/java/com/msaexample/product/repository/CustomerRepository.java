@@ -8,4 +8,5 @@ import com.msaexample.product.domain.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
+	Customer findByEmail(String email);
 }
