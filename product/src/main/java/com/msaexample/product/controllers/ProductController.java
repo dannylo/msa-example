@@ -1,5 +1,6 @@
 package com.msaexample.product.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.msaexample.product.domain.Product;
 import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.service.ProductService;
@@ -39,6 +42,15 @@ public class ProductController {
 		try {
 			return new ResponseEntity<Product> (this.service.save(product), HttpStatus.OK);
 		} catch (ProductException e) {
+			logger.error(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (JsonParseException e) {
+			logger.error(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (JsonMappingException e) {
+			logger.error(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (IOException e) {
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

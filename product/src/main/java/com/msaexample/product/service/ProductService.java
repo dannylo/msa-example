@@ -1,31 +1,24 @@
 package com.msaexample.product.service;
 
-import java.math.BigDecimal;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.msaexample.product.amqp.sender.SenderCreditOrder;
-import com.msaexample.product.config.InventoryConfig;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.msaexample.product.domain.Product;
-import com.msaexample.product.domain.Request;
-import com.msaexample.product.dto.InventoryDTO;
 import com.msaexample.product.enums.ExceptionMessages;
 import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.repository.ProductRepository;
 import com.msaexample.product.rest.handleexception.RestTemplateResponseErrorHandler;
+import com.msaexample.product.servicerequest.InventoryServiceRequest;
 import com.msaexample.product.validation.ValidationMediator;
 import com.msaexample.product.validation.product.ProductValidationMediator;
 
@@ -35,15 +28,15 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 
-	@Autowired
-	private InventoryConfig inventoryConfig;
-
 	private RestTemplate restTemplate;
 
 	private ValidationMediator<Product> validator = new ProductValidationMediator();
 	
 	@Autowired
 	private RestTemplateResponseErrorHandler errorHandler;
+	
+	@Autowired
+	private InventoryServiceRequest serviceRequest;
 
 	@PostConstruct
 	public void init() {
@@ -52,29 +45,18 @@ public class ProductService {
 	}
 
 	@Transactional
-	public Product save(Product newProduct) throws ProductException {
+	public Product save(Product newProduct) 
+			throws ProductException, JsonParseException, JsonMappingException, IOException {
 		if (validator.verify(newProduct).exists()) {
 			throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
 		}
 		
-		StringBuilder inventoryPath = this.inventoryConfig.getURLPrefix().append(this.inventoryConfig.getRoot());
-
 		newProduct = this.repository.save(newProduct);
-		InventoryDTO inventory = this.getDefaultInventory(newProduct);
-		HttpEntity<InventoryDTO> entity = new HttpEntity<InventoryDTO>(inventory);
+		this.serviceRequest.createInventory(newProduct);
 		
 		return newProduct;
 	}
 
-	private InventoryDTO getDefaultInventory(Product product) {
-		InventoryDTO inventory = new InventoryDTO();
-		inventory.setIdProduct(product.getId());
-		inventory.setAverageUnitPrice(product.getUnitPrice());
-		inventory.setTotal(BigDecimal.ZERO);
-		inventory.setQtdAvailable(0);
-
-		return inventory;
-	}
 
 	public List<Product> getAll() {
 		return this.repository.findAll();
@@ -91,7 +73,7 @@ public class ProductService {
 
 	public Product updated(Product updatedProduct) throws ProductException {
 		// avoiding bad requests.
-		Product verify = this.getById(updatedProduct.getId());
+		this.getById(updatedProduct.getId());
 		return this.repository.save(updatedProduct);
 	}
 

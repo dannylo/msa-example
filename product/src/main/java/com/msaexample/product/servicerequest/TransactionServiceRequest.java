@@ -1,10 +1,8 @@
 package com.msaexample.product.servicerequest;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -14,29 +12,19 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.msaexample.product.amqp.sender.SenderCreditOrder;
 import com.msaexample.product.config.InventoryConfig;
-import com.msaexample.product.domain.Operation;
-import com.msaexample.product.domain.Product;
 import com.msaexample.product.domain.Request;
 import com.msaexample.product.dto.BundleDTO;
 import com.msaexample.product.dto.TransactionDTO;
-import com.msaexample.product.enums.ExceptionMessages;
 import com.msaexample.product.exception.InventoryApiException;
 import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.rest.handleexception.RestTemplateResponseErrorHandler;
-import com.msaexample.product.service.ProductService;
-/*
- TODO: Deve salvar, se o serviço de inventário conseguir processar o pedido das transações, e em seguida solicitar 
- o crédito no Broker. Em caso negativo, um rollback deve ser realizado.
- * 
-*/
+
 @Component
 public class TransactionServiceRequest {
 

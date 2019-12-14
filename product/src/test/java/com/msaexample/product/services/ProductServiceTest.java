@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.msaexample.product.config.InventoryConfig;
 import com.msaexample.product.domain.Product;
 import com.msaexample.product.exception.ProductException;
@@ -17,6 +19,7 @@ import com.msaexample.product.service.ProductService;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -53,13 +56,19 @@ public class ProductServiceTest {
 			this.service.save(product);
 		} catch (ProductException e) {
 			fail(e.getMessage());
+		} catch (JsonParseException e) {
+			fail(e.getMessage());
+		} catch (JsonMappingException e) {
+			fail(e.getMessage());
+		} catch (IOException e) {
+			fail(e.getMessage());
 		}
 
 		verify(repository).save(product);
 	}
 
 	@Test(expected = ProductException.class)
-	public void savingProductWithPriceZero() throws ProductException {
+	public void savingProductWithPriceZero() throws ProductException, JsonParseException, JsonMappingException, IOException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("Test name");
@@ -72,7 +81,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test(expected = ProductException.class)
-	public void savingProductWithNegativePrice() throws ProductException {
+	public void savingProductWithNegativePrice() throws ProductException, JsonParseException, JsonMappingException, IOException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("Test name");
@@ -85,7 +94,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test(expected = ProductException.class)
-	public void savingProductWithNullPrice() throws ProductException {
+	public void savingProductWithNullPrice() throws ProductException, JsonParseException, JsonMappingException, IOException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("Test name");
@@ -100,7 +109,7 @@ public class ProductServiceTest {
 
 
 	@Test(expected = ProductException.class)
-	public void savingProductWithEmptyName() throws ProductException {
+	public void savingProductWithEmptyName() throws ProductException, JsonParseException, JsonMappingException, IOException {
 		Product product = new Product();
 		product.setDescription("Test Product");
 		product.setName("");
@@ -136,7 +145,7 @@ public class ProductServiceTest {
 		Optional<Product> opt = Optional.of(product);
 		when(repository.findById(2)).thenReturn(opt);
 
-		Product result = service.getById(0);
+		service.getById(0);
 	}
 	
 	@Test(expected = ProductException.class)
@@ -151,7 +160,7 @@ public class ProductServiceTest {
 		when(repository.findById(2)).thenReturn(opt);
 		when(repository.findById(1)).thenReturn(Optional.empty());
 
-		Product result = service.getById(1);
+		service.getById(1);
 	}
 	
 	@Test(expected = ProductException.class)

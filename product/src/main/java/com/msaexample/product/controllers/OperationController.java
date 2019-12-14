@@ -2,7 +2,6 @@ package com.msaexample.product.controllers;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import javax.websocket.server.PathParam;
 
@@ -19,14 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.msaexample.product.config.InventoryConfig;
 import com.msaexample.product.domain.Operation;
-import com.msaexample.product.domain.Request;
 import com.msaexample.product.exception.CustomerException;
 import com.msaexample.product.exception.InventoryApiException;
 import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.service.OperationService;
-import com.msaexample.product.servicerequest.TransactionServiceRequest;
 
 @RestController
 @RequestMapping("/operations")

@@ -35,7 +35,7 @@ public class CustomerService {
 	}
 
 	public Customer update(Customer customer) throws CustomerException {
-		Customer verify = this.getById(customer.getId());
+		this.getById(customer.getId());
 		return this.save(customer);
 	}
 }
