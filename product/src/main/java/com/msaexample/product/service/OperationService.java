@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.msaexample.product.amqp.sender.SenderCreditOrder;
+import com.msaexample.product.domain.Customer;
 import com.msaexample.product.domain.Operation;
 import com.msaexample.product.domain.Request;
 import com.msaexample.product.dto.CreditMessageDTO;
@@ -101,8 +102,14 @@ public class OperationService {
 		return opt.get();
 	}
 	
+	public List<Operation> getOperationsByCustomer(int idCustomer) throws CustomerException{
+		Customer validated = this.customerService.getById(idCustomer);
+		return this.repository.findByCustomer(validated);
+	}
+	
 	/* The rollback possibility is only for SALE's Operation. */
-	public void rollbackOperation(Operation operation) throws JsonParseException, JsonMappingException, ProductException, IOException, OperationException {
+	public void rollbackOperation(Operation operation) 
+			throws JsonParseException, JsonMappingException, ProductException, IOException, OperationException {
 		if(operation.getType() == OperationType.SALE 
 				&& operation.getStatus() == StatusOperation.DENIED) {
 			List<Request> requests = operation.getRequests()

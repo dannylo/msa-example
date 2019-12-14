@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import javax.websocket.server.PathParam;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,28 +35,42 @@ public class OperationController {
 	@Autowired
 	private OperationService service;
 	
+	private Logger logger = LoggerFactory.getLogger(OperationController.class);
+	
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Operation operation) {
 		try {
 			ResponseEntity<Operation> response = new ResponseEntity<Operation>(this.service.save(operation), HttpStatus.OK);
 			return response;
 		} catch (ProductException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (InventoryApiException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (JsonParseException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (JsonMappingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (CustomerException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+	
+	@GetMapping("/customer/{idCustomer}")
+	public ResponseEntity<?> getByCustomer(@PathParam("idCustomer") int idCustomer){
+		ResponseEntity<List<Operation>> response;
+		try {
+			response = new ResponseEntity<List<Operation>>(this.service.getOperationsByCustomer(idCustomer), HttpStatus.OK);
+			return response;
+		} catch (CustomerException e) {
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
