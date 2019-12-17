@@ -2,6 +2,8 @@ package com.msaexample.product.controllers;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +30,13 @@ public class ThumbnailController {
 	private Logger logger = LoggerFactory.getLogger(ThumbnailController.class);
 
 	
-	@GetMapping(path="/files/{originalName}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public @ResponseBody byte[] getThumbnail(@PathVariable String originalName) throws IOException {
-		logger.info(originalName);
-		return IOUtils.toByteArray(this.service
-					.downloadThumbnail(originalName));
+	@GetMapping("/files/{originalName}")
+	public ResponseEntity<?> getThumbnail(@PathVariable String originalName) throws IOException {
+		byte[] thumbnail = this.service
+				.downloadThumbnail(originalName);
+		return ResponseEntity.ok()
+				.contentType(MediaType.IMAGE_JPEG)
+				.body(thumbnail);
 	}
 	
 	@PostMapping(name = "/files/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

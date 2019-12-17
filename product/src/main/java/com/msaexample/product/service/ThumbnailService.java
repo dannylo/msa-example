@@ -31,14 +31,12 @@ public class ThumbnailService {
 
 	}
 	
-	public InputStream downloadThumbnail(String originalName) {
+	public byte[] downloadThumbnail(String originalName) throws IOException {
 		StringBuilder path = new StringBuilder(imageConfig.getSource());
 		path.append(File.separator).append(originalName);
+		Path source = Paths.get(path.toString());
 
-		InputStream stream = getClass()
-				.getResourceAsStream(path.toString());
-		
-		return stream;
+		return Files.readAllBytes(source);
 	}
 
 }
