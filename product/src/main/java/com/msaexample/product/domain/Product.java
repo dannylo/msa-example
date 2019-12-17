@@ -21,6 +21,7 @@ public class Product {
 	private String description;
 	@Column(name = "unit_price")
 	private BigDecimal unitPrice;
+	private String thumbnail;
 
 	public int getId() {
 		return id;
@@ -54,7 +55,13 @@ public class Product {
 		this.unitPrice = unitPrice;
 	}
 
-	
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
 	
 
 }
