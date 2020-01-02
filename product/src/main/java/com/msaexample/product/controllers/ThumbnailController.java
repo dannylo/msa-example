@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.msaexample.product.config.ImageConfig;
 import com.msaexample.product.service.ThumbnailService;
 
 @RestController
@@ -26,6 +27,9 @@ public class ThumbnailController {
 	
 	@Autowired
 	private ThumbnailService service;
+	
+	@Autowired
+	private ImageConfig config;
 	
 	private Logger logger = LoggerFactory.getLogger(ThumbnailController.class);
 
@@ -39,11 +43,11 @@ public class ThumbnailController {
 				.body(thumbnail);
 	}
 	
-	@PostMapping(name = "/files/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(path = "/files/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<String> upload(@RequestParam("thumb") MultipartFile thumb){
 		try {
 			this.service.uploadThumbnail(thumb);
-			String virtualAccess = "http://localhost:8080/files/"
+			String virtualAccess = this.config.getRootVirtualAddress()
 					.concat(thumb.getOriginalFilename());
 			return new ResponseEntity<String>(virtualAccess, HttpStatus.OK);
 		} catch (IOException e) {

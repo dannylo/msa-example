@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 public class ImageConfig {
 
 	private String source;
+	
+	private String rootVirtualAddress;
 
 	public String getSource() {
 		return source;
@@ -16,6 +18,16 @@ public class ImageConfig {
 	public void setSource(String source) {
 		this.source = source;
 	}
+
+	public String getRootVirtualAddress() {
+		return rootVirtualAddress;
+	}
+
+	public void setRootVirtualAddress(String rootVirtualAddress) {
+		this.rootVirtualAddress = rootVirtualAddress;
+	}
+	
+	
 	
 	
 }
