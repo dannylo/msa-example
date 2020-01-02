@@ -57,7 +57,7 @@ public class TransactionServiceRequest {
 	}
 
 
-	public BundleDTO processTransactions(List<Request> requests) throws ProductException, JsonParseException, JsonMappingException, IOException {
+	public BundleDTO processTransactions(List<Request> requests) throws JsonParseException, JsonMappingException, IOException {
 		List<TransactionDTO> transactions = this.convert(requests);
 		StringBuilder path = this.inventoryConfig.getURLPrefix().append(this.inventoryConfig.getRoot());	
 

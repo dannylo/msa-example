@@ -1,6 +1,7 @@
 package com.msaexample.product.service;
 
 import java.io.IOException;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,11 @@ import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.repository.OperationRepository;
 import com.msaexample.product.servicerequest.TransactionServiceRequest;
 
+/**
+ * Classe é responsável por lidar com operações que envolvem os produtos e os clientes.
+ * 
+ * @author Dannylo Johnathan
+ * */
 @Service
 public class OperationService {
 
@@ -56,7 +62,6 @@ public class OperationService {
 				r.setTotal(r.getProduct().getUnitPrice().multiply(new BigDecimal(r.getQtd() * -1)));
 			} catch (ProductException e) {
 				r.setProduct(null);
-				logger.error(e.getMessage());
 			}
 		});
 
@@ -84,6 +89,7 @@ public class OperationService {
 			}
 			operation.calculateTotal();
 			operation.setCustomer(this.customerService.getById(operation.getCustomer().getId()));
+			
 			this.serviceRequest.processTransactions(operation.getRequests());
 			operation = repository.save(operation);
 			this.sendCreditRequest(operation); // asynchronous call.

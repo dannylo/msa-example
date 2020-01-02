@@ -2,7 +2,6 @@ package com.msaexample.product.enums;
 
 public enum OperationType {
 	
-	BUY("Buy"),
 	SALE("Sale");
 	
 	private String description;
