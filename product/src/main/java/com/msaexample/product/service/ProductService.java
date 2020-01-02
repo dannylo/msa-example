@@ -30,7 +30,7 @@ public class ProductService {
 
 	private RestTemplate restTemplate;
 
-	private ValidationMediator<Product> validator = new ProductValidationMediator();
+	private ValidationMediator<Product> validator;
 	
 	@Autowired
 	private RestTemplateResponseErrorHandler errorHandler;
@@ -42,6 +42,8 @@ public class ProductService {
 	public void init() {
 		this.restTemplate = new RestTemplate();
 		this.restTemplate.setErrorHandler(errorHandler);
+		
+		validator = new ProductValidationMediator();
 	}
 
 	@Transactional

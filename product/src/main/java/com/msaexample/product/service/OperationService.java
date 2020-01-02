@@ -49,7 +49,7 @@ public class OperationService {
 
 	private Logger logger = LoggerFactory.getLogger(OperationService.class);
 
-	private boolean validateRequests(List<Request> requests) {
+	private boolean verifiyAndNormalizeRequests(List<Request> requests) {
 		requests.stream().forEach(r -> {
 			try {
 				r.setProduct(this.productService.getById(r.getProduct().getId()));
@@ -79,7 +79,7 @@ public class OperationService {
 
 		if (operation.getId() == 0) {
 			//first 
-			if (!validateRequests(operation.getRequests())) {
+			if (!verifiyAndNormalizeRequests(operation.getRequests())) {
 				throw new ProductException(ExceptionMessages.PRODUCTS_INVALID);
 			}
 			operation.calculateTotal();
