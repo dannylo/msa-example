@@ -29,7 +29,6 @@ public class InventoryService {
 	private TransactionRepository transactionRepository;
 
 	public Inventory save(Inventory inventory) {
-		inventory.setLastUpdated(LocalDate.now());
 		return repository.save(inventory);
 	}
 
@@ -79,7 +78,6 @@ public class InventoryService {
 			transaction.getInventory().increase(transaction.getQtd());
 		}
 
-		transaction.getInventory().setLastUpdated(LocalDate.now());
 		transactionRepository.save(transaction);
 	}
 

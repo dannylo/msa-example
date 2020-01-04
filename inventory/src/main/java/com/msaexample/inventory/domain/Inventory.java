@@ -27,11 +27,13 @@ public class Inventory {
 	public void increase(int qtdAdded) {
 		this.qtdAvailable += qtdAdded;
 		this.total = total.add(averageUnitPrice.multiply(new BigDecimal(qtdAdded)));
+		this.lastUpdated = LocalDate.now();
 	}
 	
 	public void decrease(int qtdRemoved) {
 		this.qtdAvailable -= qtdRemoved;
 		this.total = total.subtract(averageUnitPrice.multiply(new BigDecimal(qtdRemoved)));
+		this.lastUpdated = LocalDate.now();
 	}
 
 	public int getId() {
@@ -50,10 +52,6 @@ public class Inventory {
 		return total;
 	}
 
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-
 	public BigDecimal getAverageUnitPrice() {
 		return averageUnitPrice;
 	}
@@ -65,11 +63,7 @@ public class Inventory {
 	public LocalDate getLastUpdated() {
 		return lastUpdated;
 	}
-
-	public void setLastUpdated(LocalDate lastUpdated) {
-		this.lastUpdated = lastUpdated;
-	}
-
+	
 	public int getIdProduct() {
 		return idProduct;
 	}
