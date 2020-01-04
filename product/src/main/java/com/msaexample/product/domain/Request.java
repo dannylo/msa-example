@@ -21,9 +21,9 @@ public class Request {
 	
 	public void calculateTotal() {
 		if(qtd < 0) {
-			setTotal(getProduct().getUnitPrice().multiply(new BigDecimal(getQtd() * -1)));
+			this.total = (getProduct().getUnitPrice().multiply(new BigDecimal(getQtd() * -1)));
 		} else {
-			setTotal(getProduct().getUnitPrice().multiply(new BigDecimal(getQtd())));
+			this.total = (getProduct().getUnitPrice().multiply(new BigDecimal(getQtd())));
 		}
 	}
 
@@ -55,8 +55,5 @@ public class Request {
 		return total;
 	}
 
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
 
 }

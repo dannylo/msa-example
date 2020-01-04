@@ -72,7 +72,8 @@ public class OperationService {
 	}
 	
 	private void sendCreditRequest(Operation operation) {
-		CreditMessageDTO message = new CreditMessageDTO(operation.getId(), operation.getCustomer().getCreditCard(),
+		CreditMessageDTO message = new CreditMessageDTO(operation.getId(), 
+				operation.getCustomer().getCreditCard(),
 				operation.getTotal());
 		try {
 			this.sender.send(message);

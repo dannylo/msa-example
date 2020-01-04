@@ -22,7 +22,6 @@ import com.msaexample.product.domain.Request;
 import com.msaexample.product.dto.BundleDTO;
 import com.msaexample.product.dto.TransactionDTO;
 import com.msaexample.product.exception.InventoryApiException;
-import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.rest.handleexception.RestTemplateResponseErrorHandler;
 
 @Component

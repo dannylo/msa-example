@@ -1,6 +1,8 @@
 package com.msaexample.product.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -39,7 +40,8 @@ public class Operation {
 	
 	public Operation() {
 		setStatus(StatusOperation.PENDENT);
-		setTotal(BigDecimal.ZERO);
+		this.requests = new ArrayList<>();
+		this.total = BigDecimal.ZERO;
 	}
 	
 	public void calculateTotal() {
@@ -71,16 +73,8 @@ public class Operation {
 		return requests;
 	}
 
-	public void setRequests(List<Request> requests) {
-		this.requests = requests;
-	}
-
 	public BigDecimal getTotal() {
 		return total;
-	}
-
-	public void setTotal(BigDecimal total) {
-		this.total = total;
 	}
 
 	public StatusOperation getStatus() {
