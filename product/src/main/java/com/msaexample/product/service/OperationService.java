@@ -2,7 +2,6 @@ package com.msaexample.product.service;
 
 import java.io.IOException;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +28,8 @@ import com.msaexample.product.exception.OperationException;
 import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.repository.OperationRepository;
 import com.msaexample.product.servicerequest.TransactionServiceRequest;
+import com.msaexample.product.validation.AbstractValidationMediator;
+import com.msaexample.product.validation.operation.OperationValidationMediator;
 
 /**
  * Classe é responsável por lidar com operações que envolvem os produtos e os clientes.
@@ -49,6 +50,8 @@ public class OperationService {
 
 	@Autowired
 	private TransactionServiceRequest serviceRequest;
+	
+	private AbstractValidationMediator<Operation> validator = new OperationValidationMediator();
 
 	@Autowired
 	private SenderCreditOrder sender;
@@ -59,7 +62,7 @@ public class OperationService {
 		requests.stream().forEach(r -> {
 			try {
 				r.setProduct(this.productService.getById(r.getProduct().getId()));
-				r.setTotal(r.getProduct().getUnitPrice().multiply(new BigDecimal(r.getQtd() * -1)));
+				r.calculateTotal();
 			} catch (ProductException e) {
 				r.setProduct(null);
 			}
@@ -80,7 +83,11 @@ public class OperationService {
 
 	@Transactional
 	public Operation save(Operation operation)
-			throws ProductException, JsonParseException, JsonMappingException, IOException, CustomerException {
+			throws ProductException, JsonParseException, JsonMappingException, IOException, CustomerException, OperationException {
+		
+		if(validator.verify(operation).exists()) {
+			throw new OperationException(ExceptionMessages.OPERATION_INVALID_PROCESS);
+		}
 
 		if (operation.getId() == 0) {
 			//first 

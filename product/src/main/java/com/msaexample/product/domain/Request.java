@@ -18,8 +18,15 @@ public class Request {
 	private Product product;
 	private int qtd;
 	private BigDecimal total;
-
 	
+	public void calculateTotal() {
+		if(qtd < 0) {
+			setTotal(getProduct().getUnitPrice().multiply(new BigDecimal(getQtd() * -1)));
+		} else {
+			setTotal(getProduct().getUnitPrice().multiply(new BigDecimal(getQtd())));
+		}
+	}
+
 	public long getId() {
 		return id;
 	}

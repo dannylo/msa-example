@@ -1,7 +1,6 @@
 package com.msaexample.product.service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class InputProductService {
 		requests.stream().forEach(r -> {
 			try {
 				r.setProduct(this.productService.getById(r.getProduct().getId()));
-				r.setTotal(r.getProduct().getUnitPrice().multiply(new BigDecimal(r.getQtd())));
+				r.calculateTotal();
 			} catch (ProductException e) {
 				r.setProduct(null);
 			}

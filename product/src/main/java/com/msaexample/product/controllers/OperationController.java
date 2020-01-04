@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.msaexample.product.domain.Operation;
 import com.msaexample.product.exception.CustomerException;
 import com.msaexample.product.exception.InventoryApiException;
+import com.msaexample.product.exception.OperationException;
 import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.service.OperationService;
 
@@ -54,6 +55,9 @@ public class OperationController {
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (CustomerException e) {
+			logger.error(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (OperationException e) {
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
