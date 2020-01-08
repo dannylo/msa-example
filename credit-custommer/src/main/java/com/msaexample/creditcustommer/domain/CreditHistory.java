@@ -33,6 +33,14 @@ public class CreditHistory {
 	public CreditHistory() {
 		this.processingDate = LocalDate.now();
 	}
+	
+	public CreditHistory(long operationId, BigDecimal value, Status status, long authorizationCode) {
+		this.operationId = operationId;
+		this.value = value;
+		this.status = status;
+		this.authorizationCode = authorizationCode;
+		this.processingDate = LocalDate.now();
+	}
 
 	public long getId() {
 		return id;
@@ -40,10 +48,6 @@ public class CreditHistory {
 
 	public LocalDate getProcessingDate() {
 		return processingDate;
-	}
-
-	public void setProcessingDate(LocalDate processingDate) {
-		this.processingDate = processingDate;
 	}
 	
 	public long getOperationId() {

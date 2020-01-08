@@ -32,8 +32,6 @@ public class QueueReciever {
 	@Autowired
 	private ResultCreditSender sender;
 	
-	private Logger logger = LoggerFactory.getLogger(QueueReciever.class);
-	
 	private ObjectMapper mapper = new ObjectMapper();
 	
 	@RabbitHandler
@@ -42,12 +40,11 @@ public class QueueReciever {
 		customerData.setPaymentSystem(PaymentSystem.PAGSEGURO);
 		CreditResponse result = customerData.performPayment();
 		
-		CreditHistory history = new CreditHistory();
-		history.setOperationId(customerData.getOperationId());
-		history.setAuthorizationCode(result.getAuthorizationCode());
-		history.setProcessingDate(LocalDate.now());
-		history.setStatus(result.getStatus());
-		history.setValue(customerData.getValueRequested());
+		CreditHistory history = new CreditHistory(customerData.getOperationId(), 
+				customerData.getValueRequested(),
+				result.getStatus(),
+				result.getAuthorizationCode()
+		);
 		service.save(history);
 		
 		ResponseDTO response = new ResponseDTO(history.getAuthorizationCode(), 
