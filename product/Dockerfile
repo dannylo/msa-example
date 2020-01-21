@@ -1,10 +1,9 @@
 FROM openjdk:8-jdk-alpine
-
 VOLUME /tmp
 
-# The application's jar file
-ARG JAR_FILE=target/product-0.0.1-SNAPSHOT.jar
+RUN mkdir -p /api/
+RUN mkdir -p /api/logs/
 
-COPY ${JAR_FILE} app.jar
+ADD target/product-0.0.1-SNAPSHOT.jar /api/api.jar
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=container", "-jar", "/api/api.jar"]

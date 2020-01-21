@@ -1,7 +1,7 @@
 package com.msaexample.product.service;
 
 import java.io.IOException;
-
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,7 +89,7 @@ public class OperationService {
 		if(validator.verify(operation).exists()) {
 			throw new OperationException(ExceptionMessages.OPERATION_INVALID_PROCESS);
 		}
-
+		
 		if (operation.getId() == 0) {
 			//first 
 			if (!verifiyAndNormalizeRequests(operation.getRequests())) {
