@@ -1,0 +1,35 @@
+version: "3"
+services:
+  postgres-credit:
+    image: postgres:latest
+    network_mode: bridge
+    container_name: postgres-credit
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    expose:
+      - 5434
+    ports:
+      - 5434:5432
+    environment:
+         - POSTGRES_PASSWORD=root
+         - POSTGRES_USER=postgres
+         - POSTGRES_DB=credit-history
+    restart: unless-stopped
+
+    
+  credit-app:
+    image: credit-api:latest
+    network_mode: bridge
+    container_name: credit-app
+    expose:
+      - 8082
+    ports:
+      - 8082:8082
+    restart: unless-stopped
+    depends_on:
+      - postgres-credit
+    links:
+      - postgres-credit
+      
+volumes:
+  postgres-data:
