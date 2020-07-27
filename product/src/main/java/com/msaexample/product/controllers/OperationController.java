@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.msaexample.product.domain.Operation;
 import com.msaexample.product.exception.CustomerException;
-import com.msaexample.product.exception.InventoryApiException;
 import com.msaexample.product.exception.OperationException;
 import com.msaexample.product.exception.ProductException;
 import com.msaexample.product.service.OperationService;
@@ -39,28 +36,10 @@ public class OperationController {
 		try {
 			ResponseEntity<Operation> response = new ResponseEntity<Operation>(this.service.save(operation), HttpStatus.OK);
 			return response;
-		} catch (ProductException e) {
+		} catch (ProductException | IOException | CustomerException | OperationException  e) {
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (InventoryApiException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (JsonParseException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (JsonMappingException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (CustomerException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (OperationException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		} 
 	}
 	
 	@GetMapping("/customer/{idCustomer}")

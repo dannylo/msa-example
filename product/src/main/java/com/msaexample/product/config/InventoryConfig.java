@@ -19,6 +19,10 @@ public class InventoryConfig {
 		return path;
 	}
 	
+	public StringBuilder getURLPrefixWithRootPath() {
+		return this.getURLPrefix().append(this.getRoot());
+	}
+	
 
 
 	public String getUrl() {

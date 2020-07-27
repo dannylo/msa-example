@@ -33,19 +33,10 @@ public class InputProductController {
 	public ResponseEntity<?> registerInput(@RequestBody List<Request> requests){
 		try {
 			return new ResponseEntity<BundleDTO>(this.inputService.registerInput(requests), HttpStatus.OK);
-		} catch (JsonParseException e) {
+		} catch (ProductException | IOException e) {
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (JsonMappingException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (ProductException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		} 
 	}
 
 }

@@ -6,4 +6,4 @@ RUN mkdir -p /api/logs/
 
 ADD target/product-0.0.1-SNAPSHOT.jar /api/api.jar
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=container", "-jar", "/api/api.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-jar", "/api/api.jar"]

@@ -41,19 +41,10 @@ public class ProductController {
 	public ResponseEntity<?> save(@RequestBody Product product){
 		try {
 			return new ResponseEntity<Product> (this.service.save(product), HttpStatus.OK);
-		} catch (ProductException e) {
+		} catch (ProductException | IOException e) {
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (JsonParseException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (JsonMappingException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		} 
 	}
 	
 	@GetMapping("/{id}")

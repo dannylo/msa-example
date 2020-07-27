@@ -41,7 +41,6 @@ public class TransactionServiceRequest {
 	public void init() {
 		this.rest = new RestTemplate();
 		this.rest.setErrorHandler(errorHandler);
-		
 		this.mapper = new ObjectMapper();
 	}
 	
@@ -58,12 +57,9 @@ public class TransactionServiceRequest {
 
 	public BundleDTO processTransactions(List<Request> requests) throws JsonParseException, JsonMappingException, IOException {
 		List<TransactionDTO> transactions = this.convert(requests);
-		StringBuilder path = this.inventoryConfig.getURLPrefix().append(this.inventoryConfig.getRoot());	
-
 		HttpEntity<List<TransactionDTO>> entity = new HttpEntity<List<TransactionDTO>>(transactions);
-		path.append("/transaction");
 		
-		ResponseEntity<String> response = rest.exchange(path.toString(), HttpMethod.POST, entity,
+		ResponseEntity<String> response = rest.exchange(this.inventoryConfig.getURLPrefixWithRootPath().toString(), HttpMethod.POST, entity,
 				String.class);
 		
 		if(response.getStatusCode().equals(HttpStatus.BAD_REQUEST)) { 
